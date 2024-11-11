@@ -1,0 +1,26 @@
+# Path to the SkypeSettings.xml file for the MTR
+$settingsFilePath = "C:\Users\Skype\AppData\Local\Packages\Microsoft.SkypeRoomSystem_8wekyb3d8bbwe\LocalState\SkypeSettings.xml"
+
+# XML content with the noise suppression setting
+$xmlContent = @"
+<SkypeSettings>
+    <NoiseSuppressionDefault>1</NoiseSuppressionDefault>
+</SkypeSettings>
+"@
+
+# Check if the settings file exists
+if (Test-Path -Path $settingsFilePath) {
+    Write-Output "SkypeSettings.xml file exists. Updating the Noise Suppression setting."
+    [System.IO.File]::WriteAllText($settingsFilePath, $xmlContent)
+} else {
+    Write-Output "SkypeSettings.xml file does not exist. Creating the file with the Noise Suppression setting."
+    # Create the directory if it does not exist
+    $directoryPath = Split-Path -Path $settingsFilePath
+    if (!(Test-Path -Path $directoryPath)) {
+        New-Item -ItemType Directory -Path $directoryPath
+    }
+    # Create the XML file with the specified content
+    [System.IO.File]::WriteAllText($settingsFilePath, $xmlContent)
+}
+
+Write-Output "Noise Suppression setting applied successfully."
